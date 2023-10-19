@@ -25,7 +25,7 @@ services:
       - WG_HOST= my.ddns.net
 
       # Optional:
-      - PASSWORD=10h30
+      - PASSWORD=W1reh0le
       - WG_PORT=51820
       - WG_DEFAULT_ADDRESS=10.6.0.x
       - WG_DEFAULT_DNS=10.2.0.100
@@ -62,7 +62,7 @@ services:
       - 127.0.0.1
       - 10.2.0.200 # Points to unbound
     environment:
-      TZ: "Asia/Hong_Kong"
+      TZ: "America/Sao_Paulo"
       WEBPASSWORD: "" # Blank password - Can be whatever you want.
       ServerIP: 10.2.0.100 # Internal IP of pihole
       DNS1: 10.2.0.200 # Unbound IP
