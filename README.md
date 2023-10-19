@@ -53,9 +53,10 @@ If you are using Raspberry Pi, please uncomment `#image: "mvance/unbound-rpi:lat
 ```bash
 #!/bin/bash
 
-# Prereqs and docker
-sudo apt-get update &&
-    sudo apt-get install -yqq \
+# prereqs
+sudo apt update &&
+        sudo apt install -yqq \
+        apt-utils \
         curl \
         git \
         apt-transport-https \
@@ -63,24 +64,27 @@ sudo apt-get update &&
         gnupg-agent \
         software-properties-common
 
-# Install Docker repository and keys
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+# docker's official GPG key:
+sudo apt update
+sudo apt install ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
-sudo add-apt-repository \
-    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-        $(lsb_release -cs) \
-        stable" &&
-    sudo apt-get update &&
-    sudo apt-get install docker-ce docker-ce-cli containerd.io -yqq
+# docker repository to Apt sources:
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update -yqq
 
-# docker-compose
-sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose &&
-    sudo chmod +x /usr/local/bin/docker-compose &&
-    sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+# docker & compose packages
+apt install -yqq docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
 
 # wirehole
-git clone https://github.com/10h30/wirehole-ui.git &&
-    cd wirehole &&
+git clone https://github.com/dollarbr/wirehole-ui.git &&
+    cd wirehole-ui &&
     docker-compose up
 
 ```
