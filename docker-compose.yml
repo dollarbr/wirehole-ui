@@ -3,7 +3,6 @@ version: "3"
 networks:
   private_network:
     ipam:
-      enable_ipv6: true
       driver: default
       config:
         - subnet: 10.2.0.0/24
